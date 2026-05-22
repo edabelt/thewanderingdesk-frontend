@@ -1,0 +1,91 @@
+<svelte:head>
+
+  <title>
+    The Wandering Desk
+  </title>
+
+</svelte:head>
+
+<section class="hero is-light is-medium">
+
+  <div class="hero-body">
+
+    <div class="container">
+
+      <div
+        class="columns is-vcentered is-variable is-6"
+      >
+
+        <div class="column is-half">
+
+          <h1 class="title is-2">
+            Welcome to The Wandering Desk
+          </h1>
+
+          <p class="subtitle is-5">
+
+            Discover, organise, and manage your
+            favourite workspaces.
+
+          </p>
+
+          <p class="mb-5">
+
+            Sign up or log in to start building
+            your own collection of workspaces
+            and organise them by category.
+
+          </p>
+
+          <div class="buttons">
+
+            <a
+              href="/signup"
+              class="button is-primary is-medium"
+            >
+              Sign Up
+            </a>
+
+            <a
+              href="/login"
+              class="button is-link is-light is-medium"
+            >
+              Log In
+            </a>
+
+          </div>
+
+        </div>
+
+        <div class="column is-half">
+
+          <div class="has-text-centered">
+
+            <img
+              src="/WDLogo.png"
+              alt="The Wandering Desk"
+              class="hero-logo"
+            >
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+
+  .hero-logo {
+
+    width: 320px;
+    max-width: 100%;
+
+  }
+
+</style>
