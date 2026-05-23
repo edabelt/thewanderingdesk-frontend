@@ -61,14 +61,12 @@
   <div class="navbar-brand">
 
     <a
-      class="navbar-item"
-      href="/dashboard"
-      onclick={closeMenu}
-    >
-
-      <BrandLogo />
-
-    </a>
+  class="navbar-item"
+  href="/dashboard"
+  onclick={closeMenu}
+>
+  <BrandLogo />
+</a>
 
     <button
       type="button"
@@ -78,11 +76,9 @@
       aria-expanded={isActive}
       onclick={toggleMenu}
     >
-
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
-
     </button>
 
   </div>
@@ -104,14 +100,18 @@
         Dashboard
       </a>
 
-      <a
-        id="about"
-        class="navbar-item has-text-white"
-        href="/about"
-        onclick={closeMenu}
-      >
-        About
-      </a>
+      {#if loggedUser?.role === "admin"}
+
+        <a
+          id="admin-dashboard"
+          class="navbar-item has-text-white"
+          href="/admin"
+          onclick={closeMenu}
+        >
+          Admin Dashboard
+        </a>
+
+      {/if}
 
     </div>
 

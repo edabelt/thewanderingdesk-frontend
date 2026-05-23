@@ -29,29 +29,16 @@
   let description =
     $state("");
 
-  let imageFile: File | null =
+  let imageFiles: FileList | null =
     null;
 
   const firebaseConfig = {
-
-    apiKey:
-      "AIzaSyA8m4KeL2KeZ97wsJ5oIHPoCmSTcl9W1y4",
-
-    authDomain:
-      "placemark-ae1ce.firebaseapp.com",
-
-    projectId:
-      "placemark-ae1ce",
-
-    storageBucket:
-      "placemark-ae1ce.firebasestorage.app",
-
-    messagingSenderId:
-      "953068667904",
-
-    appId:
-      "1:953068667904:web:b65bc29a89277f1d1f04e5"
-
+    apiKey: "AIzaSyA8m4KeL2KeZ97wsJ5oIHPoCmSTcl9W1y4",
+    authDomain: "placemark-ae1ce.firebaseapp.com",
+    projectId: "placemark-ae1ce",
+    storageBucket: "placemark-ae1ce.firebasestorage.app",
+    messagingSenderId: "953068667904",
+    appId: "1:953068667904:web:b65bc29a89277f1d1f04e5"
   };
 
   const app =
@@ -63,13 +50,8 @@
   async function findCoordinates() {
 
     if (!locationName.trim()) {
-
-      alert(
-        "Please enter a location"
-      );
-
+      alert("Please enter a location");
       return;
-
     }
 
     try {
@@ -83,13 +65,8 @@
         await response.json();
 
       if (data.length === 0) {
-
-        alert(
-          "Location not found"
-        );
-
+        alert("Location not found");
         return;
-
       }
 
       latitude =
@@ -102,9 +79,7 @@
 
       console.error(error);
 
-      alert(
-        "Unable to find coordinates"
-      );
+      alert("Unable to find coordinates");
 
     }
 
@@ -118,37 +93,45 @@
         localStorage.getItem("token");
 
       if (!token) {
-
-        alert(
-          "You must be logged in"
-        );
-
+        alert("You must be logged in");
         return;
-
       }
 
-      let imageUrl = "";
+      let imageUrl =
+        "";
 
-      if (imageFile) {
+      const imageUrls: string[] =
+        [];
 
-        const fileName =
-          `${Date.now()}-${imageFile.name}`;
+      if (imageFiles && imageFiles.length > 0) {
 
-        const storageRef =
-          ref(
-            storage,
-            `placemarks/${fileName}`
+        for (const file of Array.from(imageFiles)) {
+
+          const fileName =
+            `${Date.now()}-${file.name}`;
+
+          const storageRef =
+            ref(
+              storage,
+              `placemarks/${fileName}`
+            );
+
+          await uploadBytes(
+            storageRef,
+            file
           );
 
-        await uploadBytes(
-          storageRef,
-          imageFile
-        );
+          const url =
+            await getDownloadURL(
+              storageRef
+            );
+
+          imageUrls.push(url);
+
+        }
 
         imageUrl =
-          await getDownloadURL(
-            storageRef
-          );
+          imageUrls[0];
 
       }
 
@@ -156,19 +139,13 @@
         page.params.id;
 
       const workspace = {
-
         name,
-
         locationName,
-
         latitude,
-
         longitude,
-
         description,
-
-        image: imageUrl
-
+        image: imageUrl,
+        images: imageUrls
       };
 
       const response =
@@ -178,19 +155,11 @@
             method: "POST",
 
             headers: {
-
-              "Content-Type":
-                "application/json",
-
-              Authorization:
-                `Bearer ${token}`
-
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
             },
 
-            body:
-              JSON.stringify(
-                workspace
-              )
+            body: JSON.stringify(workspace)
           }
         );
 
@@ -205,9 +174,7 @@
 
         console.log(error);
 
-        alert(
-          "Unable to add workspace"
-        );
+        alert("Unable to add workspace");
 
       }
 
@@ -215,9 +182,7 @@
 
       console.error(error);
 
-      alert(
-        "Error creating workspace"
-      );
+      alert("Error creating workspace");
 
     }
 
@@ -356,7 +321,7 @@
   <div class="field">
 
     <label class="label">
-      Image File
+      Image Gallery
     </label>
 
     <div class="control">
@@ -365,13 +330,18 @@
         class="input"
         type="file"
         accept="image/*"
+        multiple
         onchange={(e) => {
-          imageFile =
-            e.currentTarget.files?.[0] || null;
+          imageFiles =
+            e.currentTarget.files;
         }}
       >
 
     </div>
+
+    <p class="help">
+      You can select one or more images for this workspace.
+    </p>
 
   </div>
 

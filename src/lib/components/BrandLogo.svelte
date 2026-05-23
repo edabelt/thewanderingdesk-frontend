@@ -1,4 +1,3 @@
-<a href="/dashboard" class="navbar-item">
 
   <img
     src="/WDLogo.png"
@@ -11,5 +10,3 @@
   >
     The Wandering Desk
   </span>
-
-</a>

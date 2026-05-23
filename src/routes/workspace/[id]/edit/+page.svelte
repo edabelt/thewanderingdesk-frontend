@@ -34,10 +34,11 @@
       longitude: "",
       description: "",
       image: "",
+      images: [],
       playlistid: ""
     });
 
-  let imageFile: File | null =
+  let imageFiles: FileList | null =
     null;
 
   const firebaseConfig = {
@@ -111,6 +112,16 @@
         workspace =
           await response.json();
 
+        if (
+          !workspace.images &&
+          workspace.image
+        ) {
+
+          workspace.images =
+            [workspace.image];
+
+        }
+
       } else {
 
         errors = [
@@ -180,16 +191,25 @@
     const target =
       event.currentTarget as HTMLInputElement;
 
-    imageFile =
-      target.files?.[0] || null;
+    imageFiles =
+      target.files;
 
   }
 
-  function deleteImage() {
+  function deleteImage(
+    imageToDelete: string
+  ) {
 
-    workspace.image = "";
+    workspace.images =
+      workspace.images.filter(
+        (image: string) =>
+          image !== imageToDelete
+      );
 
-    imageFile = null;
+    workspace.image =
+      workspace.images.length > 0
+        ? workspace.images[0]
+        : "";
 
   }
 
@@ -208,29 +228,35 @@
 
       }
 
-      let imageUrl =
-        workspace.image;
+      const imageUrls =
+        [...workspace.images];
 
-      if (imageFile) {
+      if (imageFiles && imageFiles.length > 0) {
 
-        const fileName =
-          `${Date.now()}-${imageFile.name}`;
+        for (const file of Array.from(imageFiles)) {
 
-        const storageRef =
-          ref(
-            storage,
-            `placemarks/${fileName}`
+          const fileName =
+            `${Date.now()}-${file.name}`;
+
+          const storageRef =
+            ref(
+              storage,
+              `placemarks/${fileName}`
+            );
+
+          await uploadBytes(
+            storageRef,
+            file
           );
 
-        await uploadBytes(
-          storageRef,
-          imageFile
-        );
+          const url =
+            await getDownloadURL(
+              storageRef
+            );
 
-        imageUrl =
-          await getDownloadURL(
-            storageRef
-          );
+          imageUrls.push(url);
+
+        }
 
       }
 
@@ -269,7 +295,10 @@
                   workspace.description,
 
                 image:
-                  imageUrl
+                  imageUrls[0] || "",
+
+                images:
+                  imageUrls
 
               })
 
@@ -361,7 +390,6 @@
                 <input
                   class="input"
                   type="text"
-                  placeholder="Enter workspace name"
                   bind:value={workspace.name}
                 >
 
@@ -380,7 +408,6 @@
                 <input
                   class="input"
                   type="text"
-                  placeholder="Enter city or place"
                   bind:value={workspace.locationName}
                 >
 
@@ -454,7 +481,6 @@
 
                 <textarea
                   class="textarea"
-                  placeholder="Write a short description of the place (max 500 characters)"
                   bind:value={workspace.description}
                 ></textarea>
 
@@ -465,7 +491,7 @@
             <div class="field">
 
               <label class="label">
-                Image File
+                Add Images
               </label>
 
               <div class="control">
@@ -474,6 +500,7 @@
                   class="input"
                   type="file"
                   accept="image/*"
+                  multiple
                   onchange={handleImageChange}
                 >
 
@@ -481,34 +508,66 @@
 
             </div>
 
-            {#if workspace.image}
+            {#if workspace.images && workspace.images.length > 0}
 
               <div class="field">
 
                 <label class="label">
-                  Current Image
+                  Gallery
                 </label>
 
-                <figure class="image is-4by3 mb-3">
-
-                  <img
-                    src={workspace.image}
-                    alt={workspace.name}
-                    style="
-                      object-fit: cover;
-                      border-radius: 8px;
-                    "
-                  >
-
-                </figure>
-
-                <button
-                  type="button"
-                  class="button is-danger is-light is-small"
-                  onclick={deleteImage}
+                <div
+                  class="
+                    columns
+                    is-mobile
+                    is-multiline
+                    is-variable
+                    is-2
+                  "
                 >
-                  Delete Image
-                </button>
+
+                  {#each workspace.images as image}
+
+                    <div class="column is-one-quarter">
+
+                      <div>
+
+                        <figure class="image is-square mb-2">
+
+                          <img
+                            src={image}
+                            alt={workspace.name}
+                            style="
+                              object-fit: cover;
+                              border-radius: 8px;
+                            "
+                          >
+
+                        </figure>
+
+                        <button
+                          type="button"
+                          class="
+                            button
+                            is-danger
+                            is-light
+                            is-small
+                            is-fullwidth
+                          "
+                          onclick={() =>
+                            deleteImage(image)
+                          }
+                        >
+                          Delete
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  {/each}
+
+                </div>
 
               </div>
 
@@ -519,7 +578,11 @@
               <div class="control">
 
                 <button
-                  class="button is-primary is-fullwidth"
+                  class="
+                    button
+                    is-primary
+                    is-fullwidth
+                  "
                 >
                   Update Workspace
                 </button>
