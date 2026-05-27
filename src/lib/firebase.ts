@@ -8,22 +8,22 @@ import {
 const firebaseConfig = {
 
   apiKey:
-    "AIzaSyDC4FnBW9fwkHTaJcmiGNGsnxYWJHWKLw8",
+    import.meta.env.VITE_FIREBASE_API_KEY,
 
   authDomain:
-    "the-wandering-desk.firebaseapp.com",
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
 
   projectId:
-    "the-wandering-desk",
+    import.meta.env.VITE_FIREBASE_PROJECT_ID,
 
   storageBucket:
-    "the-wandering-desk.firebasestorage.app",
+    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
 
   messagingSenderId:
-    "1079334959762",
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
 
   appId:
-    "1:1079334959762:web:25a356932fe5b25e3d844b"
+    import.meta.env.VITE_FIREBASE_APP_ID
 
 };
 
