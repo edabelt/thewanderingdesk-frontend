@@ -29,6 +29,9 @@
   let description =
     $state("");
 
+  let isPublic =
+    $state(false);
+
   let imageFiles: FileList | null =
     null;
 
@@ -50,8 +53,11 @@
   async function findCoordinates() {
 
     if (!locationName.trim()) {
+
       alert("Please enter a location");
+
       return;
+
     }
 
     try {
@@ -65,8 +71,11 @@
         await response.json();
 
       if (data.length === 0) {
+
         alert("Location not found");
+
         return;
+
       }
 
       latitude =
@@ -93,8 +102,11 @@
         localStorage.getItem("token");
 
       if (!token) {
+
         alert("You must be logged in");
+
         return;
+
       }
 
       let imageUrl =
@@ -139,13 +151,16 @@
         page.params.id;
 
       const workspace = {
+
         name,
         locationName,
         latitude,
         longitude,
         description,
         image: imageUrl,
-        images: imageUrls
+        images: imageUrls,
+        isPublic
+
       };
 
       const response =
@@ -332,8 +347,10 @@
         accept="image/*"
         multiple
         onchange={(e) => {
+
           imageFiles =
             e.currentTarget.files;
+
         }}
       >
 
@@ -342,6 +359,21 @@
     <p class="help">
       You can select one or more images for this workspace.
     </p>
+
+  </div>
+
+  <div class="field">
+
+    <label class="checkbox">
+
+      <input
+        type="checkbox"
+        bind:checked={isPublic}
+      >
+
+      Share this workspace with the community
+
+    </label>
 
   </div>
 

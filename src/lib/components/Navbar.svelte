@@ -99,6 +99,14 @@
       >
         Dashboard
       </a>
+      <a
+        id="community"
+        class="navbar-item has-text-white"
+        href="/community"
+        onclick={closeMenu}
+      >
+          Community
+      </a>
 
       {#if loggedUser?.role === "admin"}
 

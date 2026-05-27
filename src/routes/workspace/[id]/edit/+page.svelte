@@ -35,6 +35,7 @@
       description: "",
       image: "",
       images: [],
+      isPublic: false,
       playlistid: ""
     });
 
@@ -119,6 +120,13 @@
 
           workspace.images =
             [workspace.image];
+
+        }
+
+        if (workspace.isPublic === undefined) {
+
+          workspace.isPublic =
+            false;
 
         }
 
@@ -298,7 +306,10 @@
                   imageUrls[0] || "",
 
                 images:
-                  imageUrls
+                  imageUrls,
+
+                isPublic:
+                  workspace.isPublic
 
               })
 
@@ -365,7 +376,11 @@
 
             <button
               class="button is-light"
-              onclick={() => goto(`/workspace/${workspace.playlistid}`)}
+              onclick={() =>
+                goto(
+                  `/workspace/${workspace.playlistid}`
+                )
+              }
             >
               Back to Workspaces
             </button>
@@ -572,6 +587,21 @@
               </div>
 
             {/if}
+
+            <div class="field">
+
+              <label class="checkbox">
+
+                <input
+                  type="checkbox"
+                  bind:checked={workspace.isPublic}
+                >
+
+                Share this workspace with the community
+
+              </label>
+
+            </div>
 
             <div class="field mt-5">
 

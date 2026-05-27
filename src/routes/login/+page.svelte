@@ -6,6 +6,15 @@
   import ErrorMessage
     from "$lib/components/ErrorMessage.svelte";
 
+  import {
+    signInWithPopup
+  } from "firebase/auth";
+
+  import {
+    auth,
+    googleProvider
+  } from "$lib/firebase";
+
   let email =
     $state("");
 
@@ -14,6 +23,38 @@
 
   let errors =
     $state<any[]>([]);
+
+  function storeLogin(
+    data: any
+  ) {
+
+    localStorage.setItem(
+      "token",
+      data.token
+    );
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data.user)
+    );
+
+  }
+
+  async function redirectByRole(
+    user: any
+  ) {
+
+    if (user.role === "admin") {
+
+      await goto("/admin");
+
+    } else {
+
+      await goto("/dashboard");
+
+    }
+
+  }
 
   async function login() {
 
@@ -43,19 +84,13 @@
       if (response.ok) {
 
         const data =
-  await response.json();
+          await response.json();
 
-localStorage.setItem(
-  "token",
-  data.token
-);
+        storeLogin(data);
 
-localStorage.setItem(
-  "user",
-  JSON.stringify(data.user)
-);
-
-await goto("/dashboard");
+        await redirectByRole(
+          data.user
+        );
 
       } else {
 
@@ -76,6 +111,92 @@ await goto("/dashboard");
             "Unable to connect to server"
         }
       ];
+
+    }
+
+  }
+
+  async function loginWithGoogle() {
+
+    errors = [];
+
+    try {
+
+      const result =
+        await signInWithPopup(
+          auth,
+          googleProvider
+        );
+
+      const firebaseUser =
+        result.user;
+
+      const response =
+        await fetch(
+          "http://localhost:3000/api/users/firebase-auth",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+
+                email:
+                  firebaseUser.email,
+
+                firstName:
+                  firebaseUser.displayName
+                    ? firebaseUser.displayName.split(" ")[0]
+                    : "Google",
+
+                lastName:
+                  firebaseUser.displayName
+                    ? firebaseUser.displayName
+                        .split(" ")
+                        .slice(1)
+                        .join(" ") || "User"
+                    : "User"
+
+              })
+          }
+        );
+
+      if (response.ok) {
+
+        const data =
+          await response.json();
+
+        storeLogin(data);
+
+        await redirectByRole(
+          data.user
+        );
+
+      } else {
+
+        errors = [
+          {
+            message:
+              "Unable to login with Google"
+          }
+        ];
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+      errors = [
+        {
+          message:
+            "Google login failed"
+          }
+        ];
 
     }
 
@@ -175,6 +296,16 @@ await goto("/dashboard");
             </div>
 
           </form>
+
+          <hr>
+
+          <button
+            type="button"
+            class="button is-light is-fullwidth"
+            onclick={loginWithGoogle}
+          >
+            Log in with Google
+          </button>
 
         </div>
 
