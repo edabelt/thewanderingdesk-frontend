@@ -58,7 +58,7 @@
 
       const response =
         await fetch(
-          `http://localhost:3000/api/categories/${page.params.id}`,
+          `https://thewanderingdesk-backend.onrender.com/api/categories/${page.params.id}`,
           {
             headers: {
               Authorization:

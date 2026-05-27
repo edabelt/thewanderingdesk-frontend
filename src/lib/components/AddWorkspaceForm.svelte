@@ -165,7 +165,7 @@
 
       const response =
         await fetch(
-          `http://localhost:3000/api/categories/${categoryId}/placemarks`,
+          `https://thewanderingdesk-backend.onrender.com/api/categories/${categoryId}/placemarks`,
           {
             method: "POST",
 

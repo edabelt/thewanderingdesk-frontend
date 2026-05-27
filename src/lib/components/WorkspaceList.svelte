@@ -79,7 +79,7 @@
 
     const response =
       await fetch(
-        `http://localhost:3000/api/placemarks/${id}`,
+        `https://thewanderingdesk-backend.onrender.com/api/placemarks/${id}`,
         {
           method: "DELETE"
         }

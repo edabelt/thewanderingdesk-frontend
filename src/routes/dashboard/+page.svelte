@@ -43,7 +43,7 @@
 
       const response =
         await fetch(
-          "http://localhost:3000/api/categories",
+          "https://thewanderingdesk-backend.onrender.com/api/categories",
           {
             method: "GET",
 

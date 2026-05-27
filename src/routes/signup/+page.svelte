@@ -29,7 +29,7 @@
 
       const response =
   await fetch(
-    "http://localhost:3000/api/users",
+    "https://thewanderingdesk-backend.onrender.com/api/users",
     {
       method: "POST",
 

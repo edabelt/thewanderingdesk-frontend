@@ -99,7 +99,7 @@
 
       const response =
         await fetch(
-          `http://localhost:3000/api/placemarks/${page.params.id}`,
+          `https://thewanderingdesk-backend.onrender.com/api/placemarks/${page.params.id}`,
           {
             headers: {
               Authorization:
@@ -270,7 +270,7 @@
 
       const response =
         await fetch(
-          `http://localhost:3000/api/placemarks/${page.params.id}`,
+          `https://thewanderingdesk-backend.onrender.com/api/placemarks/${page.params.id}`,
           {
             method: "PUT",
 

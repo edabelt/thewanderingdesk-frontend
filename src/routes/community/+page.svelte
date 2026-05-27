@@ -20,7 +20,7 @@
 
       const response =
         await fetch(
-          "http://localhost:3000/api/community/placemarks",
+          "https://thewanderingdesk-backend.onrender.com/api/community/placemarks",
           {
             headers: {
               Authorization:
@@ -62,7 +62,7 @@
 
       const response =
         await fetch(
-          `http://localhost:3000/api/community/placemarks/${workspaceId}/rate`,
+          `https://thewanderingdesk-backend.onrender.com/api/community/placemarks/${workspaceId}/rate`,
           {
             method: "POST",
 

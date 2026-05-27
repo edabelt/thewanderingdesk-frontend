@@ -26,7 +26,7 @@
 
       const response =
         await fetch(
-          `http://localhost:3000/api/categories/${collection._id}`,
+          `https://thewanderingdesk-backend.onrender.com/api/categories/${collection._id}`,
           {
             method: "DELETE",
 

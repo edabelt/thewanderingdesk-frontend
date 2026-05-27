@@ -64,7 +64,7 @@
 
       const response =
         await fetch(
-          "http://localhost:3000/api/users/authenticate",
+          "https://thewanderingdesk-backend.onrender.com/api/users/authenticate",
           {
             method: "POST",
 
@@ -133,7 +133,7 @@
 
       const response =
         await fetch(
-          "http://localhost:3000/api/users/firebase-auth",
+          "https://thewanderingdesk-backend.onrender.com/api/users/firebase-auth",
           {
             method: "POST",
 
